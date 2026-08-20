@@ -141,13 +141,8 @@ h6 {
 
 .section,
 .hero-section {
-    opacity: 0;
-    /* Hidden by default */
-}
-
-.section.visible,
-.hero-section.visible {
-    animation: fadeInUp 0.8s ease-out forwards;
+    /* Animation handled by Framer Motion now */
+    opacity: 1;
 }
 
 .section {
