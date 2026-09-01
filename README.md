@@ -1,32 +1,56 @@
-# React + TypeScript + Vite
+# Portfolio Djilali
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Ce projet est un portfolio dynamique développé avec **React (Vite)** pour l'interface utilisateur (Frontend) et **Sanity CMS** pour la gestion de contenu (Backend/Studio).
 
-Currently, two official plugins are available:
+## 🚀 Comment lancer le projet en local
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Pour travailler sur ce projet, vous devez lancer **deux terminaux** simultanément : un pour le site web, et un autre pour le panneau d'administration.
 
-## React Compiler
+### Étape 1 : Lancer le site web (Frontend)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+C'est l'interface visible par les visiteurs du site.
 
-## Expanding the Oxlint configuration
+1. Ouvrez un terminal.
+2. Naviguez vers le dossier racine du projet (là où se trouve ce fichier README).
+3. Installez les dépendances (si ce n'est pas déjà fait) :
+   ```bash
+   npm install
+   ```
+4. Lancez le serveur de développement :
+   ```bash
+   npm run dev
+   ```
+5. Le site sera accessible à l'adresse : **http://localhost:5173**
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+### Étape 2 : Lancer le Studio d'administration (Sanity)
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+C'est l'interface qui vous permet d'ajouter, modifier ou supprimer du contenu (articles, vidéos, livres, etc.).
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+1. Ouvrez un **deuxième** terminal.
+2. Naviguez vers le sous-dossier de Sanity :
+   ```bash
+   cd studio-djilali-portfolio
+   ```
+3. Installez les dépendances (si ce n'est pas déjà fait) :
+   ```bash
+   npm install
+   ```
+4. Lancez le studio :
+   ```bash
+   npm run dev
+   ```
+5. Le studio sera accessible à l'adresse : **http://localhost:3333**
+
+---
+
+## 📂 Structure du projet
+
+- `/src` : Contient tout le code React du site web (composants, pages, styles css).
+  - `/src/sanity` : Contient la configuration pour se connecter à la base de données Sanity.
+- `/studio-djilali-portfolio` : Contient tout le code de l'administration Sanity (backend).
+  - `/schemaTypes` : C'est ici que sont définis les modèles de données (Biographies, Articles, Livres, Paramètres du site, etc.).
+
+## 📧 Formulaire de Contact
+
+Le formulaire de contact utilise **Web3Forms**. 
+Pour l'activer, vous devez générer une clé d'accès (Access Key) sur [web3forms.com](https://web3forms.com) (en utilisant `localhost` ou votre vrai nom de domaine) et coller cette clé dans le panneau d'administration Sanity, dans le document **Paramètres du site**.

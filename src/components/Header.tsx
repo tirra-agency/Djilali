@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import { client } from '../sanity/client';
 
 const Header: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [categories, setCategories] = useState<any[]>([]);
+
+    useEffect(() => {
+        client.fetch(`*[_type == "category"] | order(title asc)`)
+            .then(setCategories)
+            .catch(console.error);
+    }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -18,10 +26,23 @@ const Header: React.FC = () => {
                     <ul>
                         <li><NavLink to="/" end>ACCUEIL</NavLink></li>
                         <li><NavLink to="/biography">BIOGRAPHIE</NavLink></li>
-                        <li><NavLink to="/writings">ÉCRITS</NavLink></li>
+                        <li className="dropdown-container">
+                            <NavLink to="/writings">THÈMES</NavLink>
+                            {categories.length > 0 && (
+                                <ul className="dropdown-menu">
+                                    {categories.map((cat) => (
+                                        <li key={cat._id}>
+                                            <Link to={`/writings?category=${cat.slug?.current}`} onClick={() => setIsMenuOpen(false)}>
+                                                {cat.title}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </li>
                         <li><NavLink to="/videos">VIDÉOS</NavLink></li>
                         <li><NavLink to="/books">LIVRES</NavLink></li>
-                        <li><a href="mailto:contact@djilali.com">CONTACT</a></li>
+                        <li><NavLink to="/contact">CONTACT</NavLink></li>
                         <li className="lang-switcher">
                             <a href="#" className="active">FR</a>
                             <span className="lang-separator">|</span>

@@ -8,9 +8,10 @@ interface ArticleCardProps {
     date: string;
     title: string;
     excerpt: string;
+    categories?: string[];
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excerpt }) => {
+const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excerpt, categories }) => {
     return (
         <motion.article 
             className="card"
@@ -20,7 +21,16 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excer
             transition={{ duration: 0.5 }}
         >
             <img src={image} alt={title} />
-            <span className="date">{date}</span>
+            <div className="card-meta">
+                <span className="date">{date}</span>
+                {categories && categories.length > 0 && (
+                    <div className="card-tags">
+                        {categories.map((cat, index) => (
+                            <span key={index} className="card-tag">{cat}</span>
+                        ))}
+                    </div>
+                )}
+            </div>
             <Link to={`/writings/${id}`}>
                 <h4 className="card-title">{title}</h4>
             </Link>

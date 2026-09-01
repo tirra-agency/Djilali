@@ -11,6 +11,7 @@ import Videos from './pages/Videos';
 import VideoDetail from './pages/VideoDetail';
 import Books from './pages/Books';
 import BookDetail from './pages/BookDetail';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/videos/:id" element={<VideoDetail />} />
           <Route path="/books" element={<Books />} />
           <Route path="/books/:id" element={<BookDetail />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<Home />} />
         </Routes>
         <Footer />

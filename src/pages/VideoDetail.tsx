@@ -1,8 +1,46 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { client } from '../sanity/client';
 
 const VideoDetail: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const [video, setVideo] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (id) {
+            client.fetch(`*[_type == "video" && _id == $id][0]`, { id })
+                .then((data) => {
+                    setVideo(data);
+                    setLoading(false);
+                })
+                .catch(console.error);
+        } else {
+            setLoading(false);
+        }
+    }, [id]);
+
+    const formattedDate = video?.publishedAt
+        ? new Date(video.publishedAt).toLocaleDateString('fr-FR', {
+            day: 'numeric', month: 'long', year: 'numeric'
+        }).toUpperCase()
+        : '12 JANVIER 2025';
+
+    // Helper to convert standard youtube links to embed links
+    const getEmbedUrl = (url: string) => {
+        if (!url) return '';
+        if (url.includes('youtube.com/watch?v=')) {
+            return url.replace('watch?v=', 'embed/');
+        }
+        if (url.includes('youtu.be/')) {
+            return url.replace('youtu.be/', 'youtube.com/embed/');
+        }
+        return url;
+    };
+
+    const embedUrl = getEmbedUrl(video?.videoUrl);
+
     return (
         <main>
             <section className="section">
@@ -11,39 +49,54 @@ const VideoDetail: React.FC = () => {
                         &larr; Retour aux vidéos
                     </Link>
                     
-                    <motion.div 
-                        style={{ position: 'relative', paddingBottom: '56.25%', height: '0', overflow: 'hidden', maxWidth: '100%', background: '#000', borderRadius: '8px', marginBottom: '30px' }}
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', textAlign: 'center' }}>
-                            <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' }}>
-                                <div style={{ width: '0', height: '0', borderTop: '15px solid transparent', borderBottom: '15px solid transparent', borderLeft: '25px solid white', marginLeft: '10px' }}></div>
-                            </div>
-                            <p>Lecteur Vidéo (YouTube / Vimeo)</p>
-                        </div>
-                    </motion.div>
+                    {loading ? (
+                        <p style={{ textAlign: 'center', marginTop: '20px' }}>Chargement en cours...</p>
+                    ) : (
+                        <>
+                            <motion.div 
+                                style={{ position: 'relative', paddingBottom: '56.25%', height: '0', overflow: 'hidden', maxWidth: '100%', background: '#000', borderRadius: '8px', marginBottom: '30px' }}
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.6 }}
+                            >
+                                {embedUrl ? (
+                                    <iframe 
+                                        src={embedUrl} 
+                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+                                        allowFullScreen
+                                        title={video?.title || "Video"}
+                                    ></iframe>
+                                ) : (
+                                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', textAlign: 'center' }}>
+                                        <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' }}>
+                                            <div style={{ width: '0', height: '0', borderTop: '15px solid transparent', borderBottom: '15px solid transparent', borderLeft: '25px solid white', marginLeft: '10px' }}></div>
+                                        </div>
+                                        <p>Lecteur Vidéo (YouTube / Vimeo)</p>
+                                    </div>
+                                )}
+                            </motion.div>
 
-                    <span className="date">12 JANVIER 2025</span>
-                    <motion.h1 
-                        style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', margin: '10px 0 20px' }}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                    >
-                        La jeune génération est plus décomplexée et porteuse d'espoir de changement
-                    </motion.h1>
-                    <motion.p 
-                        style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-light)' }}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                    >
-                        Une conversation approfondie sur les transformations nécessaires pour une Algérie démocratique. 
-                        Analyse des attentes de la jeunesse et des défis politiques contemporains face à un ordre mondial 
-                        en pleine mutation.
-                    </motion.p>
+                            <span className="date">{formattedDate}</span>
+                            <motion.h1 
+                                style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', margin: '10px 0 20px' }}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.2 }}
+                            >
+                                {video?.title || "La jeune génération est plus décomplexée et porteuse d'espoir de changement (Placeholder)"}
+                            </motion.h1>
+                            <motion.p 
+                                style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-light)' }}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.6, delay: 0.4 }}
+                            >
+                                {video?.description || `Une conversation approfondie sur les transformations nécessaires pour une Algérie démocratique. 
+                                Analyse des attentes de la jeunesse et des défis politiques contemporains face à un ordre mondial 
+                                en pleine mutation.`}
+                            </motion.p>
+                        </>
+                    )}
                 </div>
             </section>
         </main>
