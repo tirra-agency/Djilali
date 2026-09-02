@@ -15,7 +15,6 @@ const Home: React.FC = () => {
     const [posts, setPosts] = useState<any[]>([]);
     const [videos, setVideos] = useState<any[]>([]);
     const [books, setBooks] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const updateScrollAmount = () => {
@@ -47,8 +46,6 @@ const Home: React.FC = () => {
                 setBooks(fetchedBooks);
             } catch (error) {
                 console.error("Error fetching data:", error);
-            } finally {
-                setLoading(false);
             }
         };
         fetchData();
