@@ -27,7 +27,7 @@ const Header: React.FC = () => {
                         <li><NavLink to="/" end>ACCUEIL</NavLink></li>
                         <li><NavLink to="/biography">BIOGRAPHIE</NavLink></li>
                         <li className="dropdown-container">
-                            <NavLink to="/writings">THÈMES</NavLink>
+                            <NavLink to="/writings">ÉCRITS</NavLink>
                             {categories.length > 0 && (
                                 <ul className="dropdown-menu">
                                     {categories.map((cat) => (
@@ -45,8 +45,6 @@ const Header: React.FC = () => {
                         <li><NavLink to="/contact">CONTACT</NavLink></li>
                         <li className="lang-switcher">
                             <a href="#" className="active">FR</a>
-                            <span className="lang-separator">|</span>
-                            <a href="#">EN</a>
                         </li>
                     </ul>
                 </nav>

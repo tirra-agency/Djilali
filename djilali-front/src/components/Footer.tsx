@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
                     <h4 className="footer-heading">LIENS RAPIDES</h4>
                     <ul>
                         <li><Link to="/biography">Biographie</Link></li>
-                        <li><Link to="/writings">Thèmes</Link></li>
+                        <li><Link to="/writings">Écrits</Link></li>
                         <li><Link to="/videos">Vidéos</Link></li>
                         <li><Link to="/books">Livres</Link></li>
                         <li><Link to="/contact">Contact</Link></li>

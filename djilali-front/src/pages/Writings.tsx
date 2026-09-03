@@ -70,7 +70,7 @@ const Writings: React.FC = () => {
             <section className="section articles">
                 <div className="container">
                     <div className="section-heading">
-                        <h2>Tous les Thèmes</h2>
+                        <h2>Tous les Écrits</h2>
                         <hr />
                     </div>
 

@@ -83,20 +83,22 @@ const BookDetail: React.FC = () => {
                                         </p>
                                     )}
                                 </div>
-                                <a 
-                                    href={book?.pdfUrl || "#"} 
-                                    target={book?.pdfUrl ? "_blank" : "_self"}
-                                    rel="noreferrer"
-                                    className="btn-submit" 
-                                    style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '14px 32px', background: 'var(--primary-color)', color: 'white', textDecoration: 'none', borderRadius: '6px', fontSize: '1rem', transition: 'opacity 0.3s' }}
-                                >
-                                    <svg xmlns="http://www.w3.org/-2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                                    </svg>
-                                    Télécharger le PDF
-                                </a>
+                                {book?.pdfUrl && (
+                                    <a 
+                                        href={book.pdfUrl} 
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="btn-submit" 
+                                        style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '14px 32px', background: 'var(--primary-color)', color: 'white', textDecoration: 'none', borderRadius: '6px', fontSize: '1rem', transition: 'opacity 0.3s' }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/-2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                        Télécharger le PDF
+                                    </a>
+                                )}
                             </motion.div>
                         </div>
                     )}

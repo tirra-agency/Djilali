@@ -125,7 +125,7 @@ const Home: React.FC = () => {
             <section className="section articles">
                 <div className="container">
                     <div className="section-heading">
-                        <h2>Thèmes</h2>
+                        <h2>Écrits</h2>
                         <hr />
                     </div>
                     <div className="cards-grid">
@@ -148,7 +148,7 @@ const Home: React.FC = () => {
                         )}
                     </div>
                     <div className="text-center mt-40">
-                        <Link to="/writings" className="read-more">Voir tous les thèmes</Link>
+                        <Link to="/writings" className="read-more">Voir tous les écrits</Link>
                     </div>
                 </div>
             </section>
