@@ -311,13 +311,18 @@ h6 {
 .hero-image-wrapper::after {
     content: '';
     position: absolute;
-    top: -50%; left: -50%; right: -50%; bottom: -50%; /* Large overflow to prevent clipping of the gradient */
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    /* Large overflow to prevent clipping of the gradient */
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.8s ease;
     /* Very soft white radial gradient acting as a highlight */
     background: radial-gradient(circle 500px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.4), transparent 70%);
-    mix-blend-mode: overlay; /* Softly brightens the image underneath */
+    mix-blend-mode: overlay;
+    /* Softly brightens the image underneath */
     z-index: 5;
 }
 
@@ -417,6 +422,7 @@ h6 {
         top: 6px;
         opacity: 1;
     }
+
     100% {
         top: 24px;
         opacity: 0;
@@ -536,7 +542,7 @@ h6 {
     line-height: 1;
     cursor: pointer;
     z-index: 10;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     color: var(--primary-color);
     display: flex;
     align-items: center;
@@ -561,18 +567,23 @@ h6 {
     margin-top: var(--spacing-md);
     overflow-x: auto;
     padding: 1rem 0;
-    scrollbar-width: none; /* Hide scrollbar for Firefox */
-    -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
-    scroll-behavior: smooth; /* Smooth scrolling for JS scrollBy */
+    scrollbar-width: none;
+    /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none;
+    /* Hide scrollbar for IE/Edge */
+    scroll-behavior: smooth;
+    /* Smooth scrolling for JS scrollBy */
     width: 100%;
 }
 
 .books-grid::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Chrome/Safari */
+    display: none;
+    /* Hide scrollbar for Chrome/Safari */
 }
 
 .book-card {
-    flex: 0 0 260px; /* Default for smaller screens */
+    flex: 0 0 260px;
+    /* Default for smaller screens */
     text-align: center;
 }
 
@@ -764,7 +775,7 @@ h6 {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
 
-    .main-nav.active {
+    .main-nav.open {
         display: block;
     }
 
@@ -799,6 +810,10 @@ h6 {
         padding: var(--spacing-lg) 0;
     }
 
+    .hero-section {
+        margin-top: 10vh; /* Push elements down to center them on mobile */
+    }
+
     .footer-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
@@ -829,7 +844,7 @@ h6 {
     left: 0;
     background-color: var(--white);
     min-width: 180px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);
@@ -941,9 +956,9 @@ main {
     margin-bottom: 1.5rem;
 }
 
-.article-content h1, 
-.article-content h2, 
-.article-content h3, 
+.article-content h1,
+.article-content h2,
+.article-content h3,
 .article-content h4 {
     margin-top: 2.5rem;
     margin-bottom: 1rem;
@@ -962,7 +977,7 @@ main {
     font-size: 1.25rem;
 }
 
-.article-content ul, 
+.article-content ul,
 .article-content ol {
     margin-bottom: 1.5rem;
     padding-left: 2rem;
@@ -1047,7 +1062,8 @@ main {
 
 .contact-success h2 {
     font-family: var(--font-serif);
-    color: #15803d; /* Green color for success */
+    color: #15803d;
+    /* Green color for success */
     margin-bottom: 15px;
 }
 
