@@ -206,7 +206,7 @@ h6 {
 }
 
 .logo img {
-    height: 100px;
+    height: 80px;
 }
 
 .main-nav ul {
@@ -315,10 +315,12 @@ h6 {
     height: 100%;
     pointer-events: none;
     z-index: 2;
-    -webkit-mask-image: radial-gradient(circle 250px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 80%);
-    mask-image: radial-gradient(circle 250px at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 80%);
-    opacity: var(--hover-opacity, 0);
+    opacity: 0;
     transition: opacity 0.4s ease;
+}
+
+.hero-image-wrapper:hover .hero-portrait-color {
+    opacity: 1;
 }
 
 .hero-image-fade {
@@ -798,7 +800,8 @@ h6 {
     }
 
     .hero-section {
-        margin-top: 10vh; /* Push elements down to center them on mobile */
+        margin-top: 10vh;
+        /* Push elements down to center them on mobile */
     }
 
     .footer-grid {

@@ -2,29 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const Hero: React.FC = () => {
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const { currentTarget, clientX, clientY } = e;
-        const { left, top, width, height } = currentTarget.getBoundingClientRect();
-        
-        const x = clientX - left;
-        const y = clientY - top;
-        
-        // Use percentages for better responsiveness in CSS
-        const xPercent = (x / width) * 100;
-        const yPercent = (y / height) * 100;
-        
-        currentTarget.style.setProperty('--mouse-x', `${xPercent}%`);
-        currentTarget.style.setProperty('--mouse-y', `${yPercent}%`);
-    };
-
-    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.currentTarget.style.setProperty('--hover-opacity', '1');
-    };
-
-    const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.currentTarget.style.setProperty('--hover-opacity', '0');
-    };
-
     return (
         <section className="hero-section">
             <div className="container">
@@ -38,12 +15,7 @@ const Hero: React.FC = () => {
                     <span className="italic-part">modernité</span><br />
                     pour l'Algérie ?
                 </motion.h1>
-                <div 
-                    className="hero-image-wrapper"
-                    onMouseMove={handleMouseMove}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                >
+                <div className="hero-image-wrapper">
                     <motion.img 
                         src="/assets/images/hero.png" 
                         alt="Portrait de Soufiane Djilali" 
