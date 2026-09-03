@@ -17,6 +17,14 @@ const Hero: React.FC = () => {
         currentTarget.style.setProperty('--mouse-y', `${yPercent}%`);
     };
 
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.currentTarget.style.setProperty('--hover-opacity', '1');
+    };
+
+    const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.currentTarget.style.setProperty('--hover-opacity', '0');
+    };
+
     return (
         <section className="hero-section">
             <div className="container">
@@ -33,6 +41,8 @@ const Hero: React.FC = () => {
                 <div 
                     className="hero-image-wrapper"
                     onMouseMove={handleMouseMove}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                 >
                     <motion.img 
                         src="/assets/images/hero.png" 
@@ -41,6 +51,11 @@ const Hero: React.FC = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 1, delay: 0.2 }}
+                    />
+                    <img 
+                        src="/assets/images/hero_portrait.png" 
+                        alt="Portrait de Soufiane Djilali en couleur" 
+                        className="hero-portrait-color"
                     />
                     <div className="hero-image-fade"></div>
                 </div>
