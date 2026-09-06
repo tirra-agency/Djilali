@@ -11,9 +11,9 @@ const Hero: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    Quelle <br />
-                    <span className="italic-part">modernité</span><br />
-                    pour l'Algérie ?
+                    <span>Quelle</span>
+                    <span className="italic-part">modernité</span>
+                    <span>pour l'Algérie ?</span>
                 </motion.h1>
                 <div className="hero-image-wrapper">
                     <motion.img 
