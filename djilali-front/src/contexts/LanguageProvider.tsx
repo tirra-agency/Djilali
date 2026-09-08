@@ -21,14 +21,16 @@ export const LanguageProvider: React.FC<{children: React.ReactNode}> = ({childre
 
   useEffect(() => {
     try { localStorage.setItem('site-lang', lang) } catch {}
-    // set document attributes for accessibility and RTL
+    // set document attributes for accessibility, RTL and document title
     document.documentElement.lang = lang === 'fr' ? 'fr' : 'ar'
     if (lang === 'ar') {
       document.body.classList.add('rtl')
       document.documentElement.dir = 'rtl'
+      document.title = 'سفيان جيلالي | الموقع الرسمي'
     } else {
       document.body.classList.remove('rtl')
       document.documentElement.dir = 'ltr'
+      document.title = 'Soufiane Djilali | Site Officiel'
     }
   }, [lang])
 
