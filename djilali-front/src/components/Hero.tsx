@@ -1,7 +1,10 @@
 import React from 'react';
+import { useLanguage } from '../contexts/LanguageProvider';
 import { motion } from 'framer-motion';
 
 const Hero: React.FC = () => {
+    const { lang } = useLanguage();
+
     return (
         <section className="hero-section">
             <div className="container">
@@ -11,9 +14,18 @@ const Hero: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <span>Quelle</span>
-                    <span className="italic-part">modernité</span>
-                    <span>pour l'Algérie ?</span>
+                    {lang === 'ar' ? (
+                        <>
+                            <span className="arabic-main italic-part">أي حداثة</span>
+                            <span className="arabic-main arabic-last">تليق بالجزائر؟</span>
+                        </>
+                    ) : (
+                        <>
+                            <span>Quelle</span>
+                            <span className="italic-part">modernité</span>
+                            <span>pour l'Algérie ?</span>
+                        </>
+                    )}
                 </motion.h1>
                 <div className="hero-image-wrapper">
                     <motion.img 
@@ -38,7 +50,7 @@ const Hero: React.FC = () => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
                 >
-                    Réflexions sur l'Algérie de demain et les enjeux contemporains
+                    {lang === 'ar' ? 'تأملات حول جزائر الغد والقضايا المعاصرة' : 'Réflexions sur l\'Algérie de demain et les enjeux contemporains'}
                 </motion.p>
                 <div className="scroll-indicator"></div>
             </div>

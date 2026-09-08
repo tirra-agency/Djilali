@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { client } from '../sanity/client';
+import { useLanguage } from '../contexts/LanguageProvider';
+import { hasCategoryArabic, getLocalizedCategory } from '../utils/localization';
 
 const Header: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [categories, setCategories] = useState<any[]>([]);
+    const { lang, setLang } = useLanguage();
 
     useEffect(() => {
-        client.fetch(`*[_type == "category"] | order(title asc)`)
+        client.fetch(`*[_type == "category"] | order(title asc){_id, title, title_ar, slug}`)
             .then(setCategories)
             .catch(console.error);
     }, []);
@@ -15,6 +18,11 @@ const Header: React.FC = () => {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
+    // In Arabic mode, only show categories that have an Arabic translation in Sanity
+    const displayedCategories = lang === 'ar'
+        ? categories.filter(hasCategoryArabic)
+        : categories;
 
     return (
         <header className="main-header">
@@ -24,27 +32,41 @@ const Header: React.FC = () => {
                 </div>
                 <nav className={`main-nav ${isMenuOpen ? 'open' : ''}`}>
                     <ul>
-                        <li><NavLink to="/" end>ACCUEIL</NavLink></li>
-                        <li><NavLink to="/biography">BIOGRAPHIE</NavLink></li>
+                        <li><NavLink to="/" end>{lang === 'ar' ? 'الرئيسية' : 'ACCUEIL'}</NavLink></li>
+                        <li><NavLink to="/biography">{lang === 'ar' ? 'السيرة' : 'BIOGRAPHIE'}</NavLink></li>
                         <li className="dropdown-container">
-                            <NavLink to="/writings">ÉCRITS</NavLink>
-                            {categories.length > 0 && (
+                            <NavLink to="/writings">{lang === 'ar' ? 'المقالات' : 'ÉCRITS'}</NavLink>
+                            {displayedCategories.length > 0 && (
                                 <ul className="dropdown-menu">
-                                    {categories.map((cat) => (
+                                    {displayedCategories.map((cat) => (
                                         <li key={cat._id}>
                                             <Link to={`/writings?category=${cat.slug?.current}`} onClick={() => setIsMenuOpen(false)}>
-                                                {cat.title}
+                                                {getLocalizedCategory(cat, lang)}
                                             </Link>
                                         </li>
                                     ))}
                                 </ul>
                             )}
                         </li>
-                        <li><NavLink to="/videos">VIDÉOS</NavLink></li>
-                        <li><NavLink to="/books">LIVRES</NavLink></li>
-                        <li><NavLink to="/contact">CONTACT</NavLink></li>
+                        <li><NavLink to="/videos">{lang === 'ar' ? 'فيديوهات' : 'VIDÉOS'}</NavLink></li>
+                        <li><NavLink to="/books">{lang === 'ar' ? 'كتب' : 'LIVRES'}</NavLink></li>
+                        <li><NavLink to="/contact">{lang === 'ar' ? 'اتصل' : 'CONTACT'}</NavLink></li>
                         <li className="lang-switcher">
-                            <a href="#" className="active">FR</a>
+                            {lang === 'fr' ? (
+                                <button
+                                    onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); setLang('ar'); }}
+                                    aria-label="Passer en arabe"
+                                >
+                                    AR
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); setLang('fr'); }}
+                                    aria-label="Passer en français"
+                                >
+                                    FR
+                                </button>
+                            )}
                         </li>
                     </ul>
                 </nav>

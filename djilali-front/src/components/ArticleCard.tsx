@@ -2,13 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
+interface CategoryItem {
+    name: string;
+    slug?: string;
+}
+
 interface ArticleCardProps {
     id: string;
     image: string;
     date: string;
     title: string;
     excerpt: string;
-    categories?: string[];
+    categories?: (string | CategoryItem)[];
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excerpt, categories }) => {
@@ -25,9 +30,19 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excer
                 <span className="date">{date}</span>
                 {categories && categories.length > 0 && (
                     <div className="card-tags">
-                        {categories.map((cat, index) => (
-                            <span key={index} className="card-tag">{cat}</span>
-                        ))}
+                        {categories.map((cat, index) => {
+                            const isObj = typeof cat === 'object' && cat !== null;
+                            const name = isObj ? cat.name : cat;
+                            const slug = isObj ? cat.slug : undefined;
+
+                            return slug ? (
+                                <Link key={index} to={`/writings?category=${slug}`} className="card-tag">
+                                    {name}
+                                </Link>
+                            ) : (
+                                <span key={index} className="card-tag">{name}</span>
+                            );
+                        })}
                     </div>
                 )}
             </div>

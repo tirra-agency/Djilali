@@ -9,7 +9,7 @@ export const siteSettingsType = defineType({
       name: 'twitterUrl',
       title: 'Lien X (Twitter)',
       type: 'url',
-      description: 'Le lien complet vers votre profil X (ex: https://twitter.com/votrecompte)',
+      description: 'Le lien complet vers votre profil X (ex: https://x.com/votrecompte)',
     }),
     defineField({
       name: 'facebookUrl',
