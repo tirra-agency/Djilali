@@ -24,6 +24,7 @@ const translations: Record<string, {fr: string; ar: string}> = {
   back_to_books: {fr: 'Retour aux livres', ar: 'العودة إلى الكتب'},
   back_to_videos: {fr: 'Retour aux vidéos', ar: 'العودة إلى الفيديوهات'},
   publication_date: {fr: 'DATE DE PUBLICATION :', ar: 'تاريخ النشر :'},
+  reading_time: {fr: 'min de lecture', ar: 'دقائق للقراءة'},
   author_prefix: {fr: 'Par', ar: 'تأليف'},
   download_pdf: {fr: 'Télécharger le PDF', ar: 'تحميل الكتاب بصيغة PDF'},
   all_categories: {fr: 'Tous', ar: 'الكل'},

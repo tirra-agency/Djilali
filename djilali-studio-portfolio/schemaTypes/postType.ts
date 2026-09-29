@@ -37,6 +37,13 @@ export const postType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'readingTime',
+      title: 'Temps de lecture (minutes)',
+      description: 'Durée estimée de lecture de la version française.',
+      type: 'number',
+      validation: (rule) => rule.integer().min(1),
+    }),
+    defineField({
       name: 'image',
       title: 'Image de couverture',
       type: 'image',
@@ -62,6 +69,14 @@ export const postType = defineType({
       title: 'العنوان بالعربية (Optionnel)',
       type: 'string',
       description: 'إذا تُرك فارغاً، فلن يظهر المقال عندما يكون الموقع باللغة العربية.',
+      fieldset: 'arabic',
+    }),
+    defineField({
+      name: 'readingTime_ar',
+      title: 'وقت القراءة بالعربية (بالدقائق)',
+      description: 'المدة التقديرية لقراءة النسخة العربية.',
+      type: 'number',
+      validation: (rule) => rule.integer().min(1),
       fieldset: 'arabic',
     }),
     defineField({

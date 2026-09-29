@@ -7,7 +7,7 @@ import BookCard from '../components/BookCard';
 import { client, urlFor } from '../sanity/client';
 import { useLanguage } from '../contexts/LanguageProvider';
 import { t } from '../utils/i18n';
-import { filterByLang, getLocalizedText, getLocalizedBlocks, getLocalizedCategory } from '../utils/localization';
+import { filterByLang, getLocalizedText, getLocalizedBlocks, getReadingTime, getLocalizedCategory } from '../utils/localization';
 
 const Home: React.FC = () => {
     // Book carousel logic
@@ -90,6 +90,7 @@ const Home: React.FC = () => {
     const displayedBooks = filterByLang(books, lang);
 
     const heroPost = displayedPosts.length > 0 ? displayedPosts[0] : null;
+    const heroReadingTime = heroPost ? getReadingTime(heroPost, lang) : null;
     const otherPosts = displayedPosts.slice(1, 4);
 
     return (
@@ -115,6 +116,9 @@ const Home: React.FC = () => {
                             <div className="une-content">
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
                                     <span className="date" style={{ margin: 0 }}>{heroPost.publishedAt ? formatDate(heroPost.publishedAt) : ''}</span>
+                                    {heroReadingTime !== null && (
+                                        <span className="date" style={{ margin: 0 }}>{heroReadingTime} {t('reading_time', lang)}</span>
+                                    )}
                                     {heroPost.categories && heroPost.categories.length > 0 && (
                                         <div className="card-tags">
                                             {heroPost.categories
@@ -185,6 +189,8 @@ const Home: React.FC = () => {
                                         date={post.publishedAt ? formatDate(post.publishedAt) : ''}
                                         title={postTitle}
                                         excerpt={getExcerpt(postBlocks)}
+                                        readingTime={getReadingTime(post, lang)}
+                                        lang={lang}
                                         categories={postCategories}
                                     />
                                 );

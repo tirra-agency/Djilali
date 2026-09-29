@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { t } from '../utils/i18n';
+import type { Lang } from '../utils/localization';
 
 interface CategoryItem {
     name: string;
@@ -13,10 +15,12 @@ interface ArticleCardProps {
     date: string;
     title: string;
     excerpt: string;
+    readingTime: number | null;
+    lang: Lang;
     categories?: (string | CategoryItem)[];
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excerpt, categories }) => {
+const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excerpt, readingTime, lang, categories }) => {
     return (
         <motion.article 
             className="card"
@@ -27,7 +31,12 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excer
         >
             <img src={image} alt={title} />
             <div className="card-meta">
-                <span className="date">{date}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                    <span className="date">{date}</span>
+                    {readingTime !== null && (
+                        <span className="date">{readingTime} {t('reading_time', lang)}</span>
+                    )}
+                </div>
                 {categories && categories.length > 0 && (
                     <div className="card-tags">
                         {categories.map((cat, index) => {

@@ -61,6 +61,13 @@ export const getLocalizedText = (item: any, field: string, lang: Lang): string =
     return '';
 };
 
+export const getReadingTime = (item: any, lang: Lang): number | null => {
+    if (!item) return null;
+
+    const value = lang === 'ar' ? item.readingTime_ar : item.readingTime;
+    return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : null;
+};
+
 /**
  * Safely extracts localized rich text / PortableText blocks based on the active language.
  */

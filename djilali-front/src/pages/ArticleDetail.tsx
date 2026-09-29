@@ -5,7 +5,7 @@ import { client, urlFor } from '../sanity/client';
 import { PortableText } from '@portabletext/react';
 import { useLanguage } from '../contexts/LanguageProvider';
 import { t } from '../utils/i18n';
-import { hasArabic, getLocalizedText, getLocalizedBlocks, getLocalizedCategory } from '../utils/localization';
+import { hasArabic, getLocalizedText, getLocalizedBlocks, getReadingTime, getLocalizedCategory } from '../utils/localization';
 
 const ArticleDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -44,6 +44,7 @@ const ArticleDetail: React.FC = () => {
 
     const postTitle = post ? getLocalizedText(post, 'title', lang) : '';
     const postBlocks = post ? (getLocalizedBlocks(post, 'body', lang) || (lang === 'fr' ? post.body : null)) : null;
+    const readingTime = post ? getReadingTime(post, lang) : null;
     const isArabicMissing = lang === 'ar' && post && !hasArabic(post, 'title');
 
     return (
@@ -96,6 +97,9 @@ const ArticleDetail: React.FC = () => {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '15px', flexWrap: 'wrap' }}>
                                 {formattedDate && (
                                     <span className="date" style={{ margin: 0 }}>{formattedDate}</span>
+                                )}
+                                {readingTime !== null && (
+                                    <span className="date" style={{ margin: 0 }}>{readingTime} {t('reading_time', lang)}</span>
                                 )}
                                 {postCategories.length > 0 && (
                                     <div className="card-tags">
