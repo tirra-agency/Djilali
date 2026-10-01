@@ -306,6 +306,13 @@ h6 {
     transition: color 0.3s ease;
 }
 
+.lang-switcher button.lang-btn-ar {
+    font-family: var(--font-ar);
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
 .lang-switcher button::after {
     content: '';
     position: absolute;

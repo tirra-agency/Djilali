@@ -54,10 +54,11 @@ const Header: React.FC = () => {
                         <li className="lang-switcher">
                             {lang === 'fr' ? (
                                 <button
+                                    className="lang-btn-ar"
                                     onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); setLang('ar'); }}
                                     aria-label="Passer en arabe"
                                 >
-                                    AR
+                                    العربية
                                 </button>
                             ) : (
                                 <button
