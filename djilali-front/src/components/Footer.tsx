@@ -20,17 +20,19 @@ const Footer: React.FC = () => {
         <footer className="main-footer bg-dark">
             <div className="container footer-grid">
                 <div className="footer-col brand-col">
-                    <img src="/assets/images/Djilali_Logo_light.png" alt="Soufiane Djilali Logo" className="footer-logo" />
+                    <Link to={`/${lang}`}>
+                        <img src="/assets/images/Djilali_Logo_light.png" alt="Soufiane Djilali Logo" className="footer-logo" />
+                    </Link>
                     <p className="footer-desc">{t('footer_desc', lang)}</p>
                 </div>
                 <div className="footer-col links-col">
                     <h4 className="footer-heading">{t('quick_links', lang)}</h4>
                     <ul>
-                        <li><Link to="/biography">{t('biography', lang)}</Link></li>
-                        <li><Link to="/writings">{t('writings', lang)}</Link></li>
-                        <li><Link to="/videos">{t('videos', lang)}</Link></li>
-                        <li><Link to="/books">{t('books', lang)}</Link></li>
-                        <li><Link to="/contact">{t('contact', lang)}</Link></li>
+                        <li><Link to={`/${lang}/biography`}>{t('biography', lang)}</Link></li>
+                        <li><Link to={`/${lang}/writings`}>{t('writings', lang)}</Link></li>
+                        <li><Link to={`/${lang}/videos`}>{t('videos', lang)}</Link></li>
+                        <li><Link to={`/${lang}/books`}>{t('books', lang)}</Link></li>
+                        <li><Link to={`/${lang}/contact`}>{t('contact', lang)}</Link></li>
                     </ul>
                 </div>
                 <div className="footer-col social-col">

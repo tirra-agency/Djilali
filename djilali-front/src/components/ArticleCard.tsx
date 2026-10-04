@@ -29,7 +29,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excer
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5 }}
         >
-            <img src={image} alt={title} />
+            <Link to={`/${lang}/writings/${id}`}>
+                <img src={image} alt={title} />
+            </Link>
             <div className="card-meta">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                     <span className="date">{date}</span>
@@ -40,12 +42,11 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excer
                 {categories && categories.length > 0 && (
                     <div className="card-tags">
                         {categories.map((cat, index) => {
-                            const isObj = typeof cat === 'object' && cat !== null;
-                            const name = isObj ? cat.name : cat;
-                            const slug = isObj ? cat.slug : undefined;
+                            const name = typeof cat === 'string' ? cat : cat.name;
+                            const slug = typeof cat === 'string' ? undefined : cat.slug;
 
                             return slug ? (
-                                <Link key={index} to={`/writings?category=${slug}`} className="card-tag">
+                                <Link key={index} to={`/${lang}/writings?category=${slug}`} className="card-tag">
                                     {name}
                                 </Link>
                             ) : (
@@ -55,7 +56,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excer
                     </div>
                 )}
             </div>
-            <Link to={`/writings/${id}`}>
+            <Link to={`/${lang}/writings/${id}`}>
                 <h4 className="card-title">{title}</h4>
             </Link>
             <p className="excerpt">{excerpt}</p>

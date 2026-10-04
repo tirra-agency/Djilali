@@ -7,7 +7,7 @@ import BookCard from '../components/BookCard';
 import { client, urlFor } from '../sanity/client';
 import { useLanguage } from '../contexts/LanguageProvider';
 import { t } from '../utils/i18n';
-import { filterByLang, getLocalizedText, getLocalizedBlocks, getReadingTime, getLocalizedCategory } from '../utils/localization';
+import { filterByLang, getLocalizedText, getLocalizedBlocks, getReadingTime, getLocalizedCategory, getLocalizedSlug } from '../utils/localization';
 
 const Home: React.FC = () => {
     // Book carousel logic
@@ -131,7 +131,7 @@ const Home: React.FC = () => {
                                                     cat.slug ? (
                                                         <Link 
                                                             key={index} 
-                                                            to={`/writings?category=${cat.slug}`}
+                                                            to={`/${lang}/writings?category=${cat.slug}`}
                                                             className="card-tag"
                                                         >
                                                             {cat.name}
@@ -147,7 +147,7 @@ const Home: React.FC = () => {
                                 <p className="excerpt">
                                     {getExcerpt(getLocalizedBlocks(heroPost, 'body', lang) || heroPost.body)}
                                 </p>
-                                <Link to={`/writings/${heroPost.slug?.current || heroPost._id}`} className="read-more">
+                                <Link to={`/${lang}/writings/${getLocalizedSlug(heroPost, lang)}`} className="read-more">
                                     {t('read_more', lang)}
                                 </Link>
                             </div>
@@ -184,7 +184,7 @@ const Home: React.FC = () => {
                                 return (
                                     <ArticleCard 
                                         key={post._id}
-                                        id={post.slug?.current || post._id}
+                                        id={getLocalizedSlug(post, lang)}
                                         image={post.image ? urlFor(post.image).width(600).url() : "/assets/images/article_chaos.png"}
                                         date={post.publishedAt ? formatDate(post.publishedAt) : ''}
                                         title={postTitle}
@@ -203,7 +203,7 @@ const Home: React.FC = () => {
                     </div>
                     {displayedPosts.length > 0 && (
                         <div className="text-center mt-40">
-                            <Link to="/writings" className="read-more">{t('see_all_writings', lang)}</Link>
+                            <Link to={`/${lang}/writings`} className="read-more">{t('see_all_writings', lang)}</Link>
                         </div>
                     )}
                 </div>
@@ -252,7 +252,7 @@ const Home: React.FC = () => {
                     </div>
                     {displayedVideos.length > 0 && (
                         <div className="text-center mt-40">
-                            <Link to="/videos" className="read-more">{t('see_all_videos', lang)}</Link>
+                            <Link to={`/${lang}/videos`} className="read-more">{t('see_all_videos', lang)}</Link>
                         </div>
                     )}
                 </div>

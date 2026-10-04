@@ -139,3 +139,34 @@ export const getLocalizedCategory = (cat: any, lang: Lang): string => {
     }
     return '';
 };
+
+/**
+ * Gets the localized slug for a post/article.
+ * In Arabic mode: returns slug_ar.current if available, otherwise falls back to slug.current.
+ * In French mode: returns slug.current.
+ */
+export const getLocalizedSlug = (item: any, lang: Lang): string => {
+    if (!item) return '';
+    if (lang === 'ar' && item.slug_ar?.current) {
+        return item.slug_ar.current;
+    }
+    if (item.slug?.current) {
+        return item.slug.current;
+    }
+    return item._id || '';
+};
+
+/**
+ * Prepends the language code to a relative path.
+ * Examples:
+ *   getLocalizedPath('/', 'ar') => '/ar'
+ *   getLocalizedPath('/writings', 'ar') => '/ar/writings'
+ *   getLocalizedPath('/ar/writings', 'fr') => '/fr/writings'
+ */
+export const getLocalizedPath = (path: string, lang: Lang): string => {
+    // Strip existing /fr or /ar prefix if present
+    const cleanPath = path.replace(/^\/(?:fr|ar)(?=\/|$)/, '') || '';
+    const normalized = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
+    return normalized === '/' ? `/${lang}` : `/${lang}${normalized}`;
+};
+

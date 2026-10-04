@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageProvider';
 
 interface BookCardProps {
     id: string;
@@ -9,9 +10,11 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ id, image, title, year }) => {
+    const { lang } = useLanguage();
+
     return (
         <div className="book-card">
-            <Link to={`/books/${id}`}>
+            <Link to={`/${lang}/books/${id}`}>
                 <img src={image} alt={title} />
                 <h5 className="book-title">{title}</h5>
             </Link>

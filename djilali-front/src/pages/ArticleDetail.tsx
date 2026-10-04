@@ -11,23 +11,29 @@ const ArticleDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [post, setPost] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const { lang, setLang } = useLanguage();
+    const { lang, setLang, setAlternateSlug } = useLanguage();
 
     useEffect(() => {
         if (id) {
-            client.fetch(`*[_type == "post" && (slug.current == $id || _id == $id)][0]{
+            client.fetch(`*[_type == "post" && (slug.current == $id || slug_ar.current == $id || _id == $id)][0]{
                 ...,
                 categories[]->{_id, title, title_ar, slug}
             }`, { id })
                 .then((data) => {
                     setPost(data);
+                    if (data) {
+                        const targetAlt = lang === 'fr' 
+                            ? (data.slug_ar?.current || data.slug?.current)
+                            : (data.slug?.current || data._id);
+                        setAlternateSlug(targetAlt || null);
+                    }
                     setLoading(false);
                 })
                 .catch(console.error);
         } else {
             setLoading(false);
         }
-    }, [id]);
+    }, [id, lang, setAlternateSlug]);
 
     const formattedDate = post?.publishedAt
         ? new Date(post.publishedAt).toLocaleDateString(lang === 'ar' ? 'ar-DZ' : 'fr-FR', {
@@ -51,7 +57,7 @@ const ArticleDetail: React.FC = () => {
         <main>
             <section className="section" style={{ paddingTop: '40px', minHeight: '60vh' }}>
                 <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-                    <Link to="/writings" className="back-link">
+                    <Link to={`/${lang}/writings`} className="back-link">
                         <span className="back-arrow">←</span>
                         <span>{t('back_to_writings', lang)}</span>
                     </Link>
@@ -76,14 +82,14 @@ const ArticleDetail: React.FC = () => {
                             </p>
                             <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
                                 <button 
-                                    onClick={() => setLang('fr')} 
+                                    onClick={() => setLang('fr', post?.slug?.current)} 
                                     className="btn-submit"
                                     style={{ background: 'var(--primary-color)', color: '#fff', border: 'none', padding: '10px 22px', borderRadius: '6px', cursor: 'pointer' }}
                                 >
                                     {t('view_in_french', lang)}
                                 </button>
                                 <Link 
-                                    to="/writings" 
+                                    to={`/${lang}/writings`} 
                                     className="back-link-btn"
                                     style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 22px', borderRadius: '6px', border: '1px solid #ccc', textDecoration: 'none', color: '#333' }}
                                 >
@@ -107,7 +113,7 @@ const ArticleDetail: React.FC = () => {
                                             cat.slug ? (
                                                 <Link 
                                                     key={index} 
-                                                    to={`/writings?category=${cat.slug}`}
+                                                    to={`/${lang}/writings?category=${cat.slug}`}
                                                     className="card-tag"
                                                 >
                                                     {cat.name}

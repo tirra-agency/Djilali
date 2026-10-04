@@ -4,7 +4,7 @@ import ArticleCard from '../components/ArticleCard';
 import { client, urlFor } from '../sanity/client';
 import { useLanguage } from '../contexts/LanguageProvider';
 import { t } from '../utils/i18n';
-import { filterByLang, getLocalizedText, getLocalizedBlocks, getReadingTime, hasCategoryArabic, getLocalizedCategory } from '../utils/localization';
+import { filterByLang, getLocalizedText, getLocalizedBlocks, getReadingTime, hasCategoryArabic, getLocalizedCategory, getLocalizedSlug } from '../utils/localization';
 
 const Writings: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -128,7 +128,7 @@ const Writings: React.FC = () => {
                                     return (
                                         <ArticleCard 
                                             key={post._id}
-                                            id={post.slug?.current || post._id}
+                                            id={getLocalizedSlug(post, lang)}
                                             image={post.image ? urlFor(post.image).width(600).url() : "/assets/images/article_chaos.png"}
                                             date={post.publishedAt ? formatDate(post.publishedAt) : ''}
                                             title={postTitle}

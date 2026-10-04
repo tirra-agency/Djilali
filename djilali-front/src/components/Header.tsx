@@ -28,19 +28,21 @@ const Header: React.FC = () => {
         <header className="main-header">
             <div className="container header-inner">
                 <div className="logo">
-                    <img src="/assets/images/Djilali_Logo.svg" alt="Soufiane Djilali Logo" />
+                    <Link to={`/${lang}`}>
+                        <img src="/assets/images/Djilali_Logo.svg" alt="Soufiane Djilali Logo" />
+                    </Link>
                 </div>
                 <nav className={`main-nav ${isMenuOpen ? 'open' : ''}`}>
                     <ul>
-                        <li><NavLink to="/" end>{lang === 'ar' ? 'الرئيسية' : 'ACCUEIL'}</NavLink></li>
-                        <li><NavLink to="/biography">{lang === 'ar' ? 'السيرة' : 'BIOGRAPHIE'}</NavLink></li>
+                        <li><NavLink to={`/${lang}`} end>{lang === 'ar' ? 'الرئيسية' : 'ACCUEIL'}</NavLink></li>
+                        <li><NavLink to={`/${lang}/biography`}>{lang === 'ar' ? 'السيرة' : 'BIOGRAPHIE'}</NavLink></li>
                         <li className="dropdown-container">
-                            <NavLink to="/writings">{lang === 'ar' ? 'المقالات' : 'ÉCRITS'}</NavLink>
+                            <NavLink to={`/${lang}/writings`}>{lang === 'ar' ? 'المقالات' : 'ÉCRITS'}</NavLink>
                             {displayedCategories.length > 0 && (
                                 <ul className="dropdown-menu">
                                     {displayedCategories.map((cat) => (
                                         <li key={cat._id}>
-                                            <Link to={`/writings?category=${cat.slug?.current}`} onClick={() => setIsMenuOpen(false)}>
+                                            <Link to={`/${lang}/writings?category=${cat.slug?.current}`} onClick={() => setIsMenuOpen(false)}>
                                                 {getLocalizedCategory(cat, lang)}
                                             </Link>
                                         </li>
@@ -48,9 +50,9 @@ const Header: React.FC = () => {
                                 </ul>
                             )}
                         </li>
-                        <li><NavLink to="/videos">{lang === 'ar' ? 'فيديوهات' : 'VIDÉOS'}</NavLink></li>
-                        <li><NavLink to="/books">{lang === 'ar' ? 'كتب' : 'LIVRES'}</NavLink></li>
-                        <li><NavLink to="/contact">{lang === 'ar' ? 'اتصل' : 'CONTACT'}</NavLink></li>
+                        <li><NavLink to={`/${lang}/videos`}>{lang === 'ar' ? 'فيديوهات' : 'VIDÉOS'}</NavLink></li>
+                        <li><NavLink to={`/${lang}/books`}>{lang === 'ar' ? 'كتب' : 'LIVRES'}</NavLink></li>
+                        <li><NavLink to={`/${lang}/contact`}>{lang === 'ar' ? 'اتصل' : 'CONTACT'}</NavLink></li>
                         <li className="lang-switcher">
                             {lang === 'fr' ? (
                                 <button

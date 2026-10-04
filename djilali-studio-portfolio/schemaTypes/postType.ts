@@ -72,6 +72,17 @@ export const postType = defineType({
       fieldset: 'arabic',
     }),
     defineField({
+      name: 'slug_ar',
+      title: 'الرابط الدائم بالعربية (Slug Arabe - Optionnel)',
+      type: 'slug',
+      options: {
+        source: 'title_ar',
+        maxLength: 96,
+      },
+      description: 'المعرف اللطيف للرابط باللغة العربية. إذا تُرك فارغاً يُستخدم الرابط الفرنسي.',
+      fieldset: 'arabic',
+    }),
+    defineField({
       name: 'readingTime_ar',
       title: 'وقت القراءة بالعربية (بالدقائق)',
       description: 'المدة التقديرية لقراءة النسخة العربية.',

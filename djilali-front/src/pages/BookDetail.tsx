@@ -44,7 +44,7 @@ const BookDetail: React.FC = () => {
         <main>
             <section className="section">
                 <div className="container" style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 20px', minHeight: '60vh' }}>
-                    <Link to="/books" className="back-link">
+                    <Link to={`/${lang}/books`} className="back-link">
                         <span className="back-arrow">←</span>
                         <span>{t('back_to_books', lang)}</span>
                     </Link>
@@ -76,7 +76,7 @@ const BookDetail: React.FC = () => {
                                     {t('view_in_french', lang)}
                                 </button>
                                 <Link 
-                                    to="/books" 
+                                    to={`/${lang}/books`} 
                                     className="back-link-btn"
                                     style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 22px', borderRadius: '6px', border: '1px solid #ccc', textDecoration: 'none', color: '#333' }}
                                 >

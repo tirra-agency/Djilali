@@ -52,7 +52,7 @@ const VideoDetail: React.FC = () => {
         <main>
             <section className="section">
                 <div className="container" style={{ maxWidth: '900px', margin: '0 auto', minHeight: '60vh' }}>
-                    <Link to="/videos" className="back-link">
+                    <Link to={`/${lang}/videos`} className="back-link">
                         <span className="back-arrow">←</span>
                         <span>{t('back_to_videos', lang)}</span>
                     </Link>
@@ -84,7 +84,7 @@ const VideoDetail: React.FC = () => {
                                     {t('view_in_french', lang)}
                                 </button>
                                 <Link 
-                                    to="/videos" 
+                                    to={`/${lang}/videos`} 
                                     className="back-link-btn"
                                     style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 22px', borderRadius: '6px', border: '1px solid #ccc', textDecoration: 'none', color: '#333' }}
                                 >
