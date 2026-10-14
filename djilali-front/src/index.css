@@ -854,6 +854,114 @@ body.rtl .newsletter-title {
     }
 }
 
+/* ==========================================================================
+   Related Articles (Static 4-col & Carousel)
+   ========================================================================== */
+.related-carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 52px;
+}
+
+.related-carousel-wrapper .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    direction: ltr;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.related-carousel-wrapper .carousel-btn:hover {
+    background: var(--bg-light);
+    transform: translateY(-50%) scale(1.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.related-carousel-wrapper .prev-btn {
+    left: 0;
+}
+
+.related-carousel-wrapper .next-btn {
+    right: 0;
+}
+
+@media (max-width: 600px) {
+    .related-carousel-wrapper {
+        padding: 0 42px;
+    }
+    .related-carousel-wrapper .carousel-btn {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+.related-grid-carousel {
+    display: flex;
+    gap: var(--spacing-md);
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    width: 100%;
+}
+
+.related-grid-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.related-grid-carousel .card {
+    flex: 0 0 280px;
+    max-width: 280px;
+}
+
+@media (min-width: 768px) {
+    .related-grid-carousel .card {
+        flex: 0 0 calc((100% - var(--spacing-md)) / 2);
+        max-width: calc((100% - var(--spacing-md)) / 2);
+    }
+}
+
+@media (min-width: 1100px) {
+    .related-grid-carousel .card {
+        flex: 0 0 calc((100% - (var(--spacing-md) * 3)) / 4);
+        max-width: calc((100% - (var(--spacing-md) * 3)) / 4);
+    }
+}
+
+.related-grid-static {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--spacing-md);
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .related-grid-static {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1100px) {
+    .related-grid-static {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
 .book-card img {
     width: 100%;
     aspect-ratio: 2/3;

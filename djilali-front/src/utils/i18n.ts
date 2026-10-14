@@ -40,6 +40,12 @@ const translations: Record<string, {fr: string; ar: string}> = {
     fr: "Contenu de la biographie sera bientôt disponible. Veuillez l'ajouter depuis le tableau de bord Sanity.",
     ar: "محتوى السيرة الذاتية سيكون متاحاً قريباً. يمكنك إضافته من لوحة تحكم Sanity."
   },
+  in_same_series: {fr: 'Dans la même série', ar: 'من نفس السلسلة'},
+  series_label: {fr: 'Série', ar: 'سلسلة'},
+  part_number: {fr: 'Partie', ar: 'الجزء'},
+  related_articles: {fr: 'Articles similaires', ar: 'مقالات ذات صلة'},
+  similar_topics: {fr: 'Sur le même thème', ar: 'في نفس الموضوع'},
+  explore_more_articles: {fr: "D'autres lectures", ar: 'قراءات أخرى'},
 }
 
 export const t = (key: string, lang: 'fr' | 'ar') => {

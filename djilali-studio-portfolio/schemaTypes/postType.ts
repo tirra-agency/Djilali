@@ -57,6 +57,20 @@ export const postType = defineType({
       of: [{type: 'reference', to: {type: 'category'}}],
     }),
     defineField({
+      name: 'series',
+      title: 'Série d’articles / سلسلة مقالات (Optionnel)',
+      description: 'Associer cet article à une série pour suggérer les autres épisodes aux lecteurs.',
+      type: 'reference',
+      to: [{type: 'series'}],
+    }),
+    defineField({
+      name: 'seriesOrder',
+      title: 'Numéro / Ordre dans la série (Optionnel)',
+      description: 'Ex: 1 pour Partie 1, 2 pour Partie 2, etc.',
+      type: 'number',
+      validation: (rule) => rule.integer().min(1),
+    }),
+    defineField({
       name: 'body',
       title: 'Contenu (Français)',
       type: 'array',

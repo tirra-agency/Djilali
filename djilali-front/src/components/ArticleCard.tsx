@@ -18,9 +18,10 @@ interface ArticleCardProps {
     readingTime: number | null;
     lang: Lang;
     categories?: (string | CategoryItem)[];
+    seriesBadge?: string;
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excerpt, readingTime, lang, categories }) => {
+const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excerpt, readingTime, lang, categories, seriesBadge }) => {
     return (
         <motion.article 
             className="card"
@@ -39,22 +40,39 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ id, image, date, title, excer
                         <span className="date">{readingTime} {t('reading_time', lang)}</span>
                     )}
                 </div>
-                {categories && categories.length > 0 && (
-                    <div className="card-tags">
-                        {categories.map((cat, index) => {
-                            const name = typeof cat === 'string' ? cat : cat.name;
-                            const slug = typeof cat === 'string' ? undefined : cat.slug;
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                    {seriesBadge && (
+                        <span 
+                            className="card-tag card-tag-series" 
+                            style={{ 
+                                background: 'var(--primary-color, #1a202c)', 
+                                color: '#ffffff', 
+                                fontWeight: 600,
+                                padding: '3px 8px',
+                                borderRadius: '4px',
+                                fontSize: '0.75rem'
+                            }}
+                        >
+                            {seriesBadge}
+                        </span>
+                    )}
+                    {categories && categories.length > 0 && (
+                        <div className="card-tags">
+                            {categories.map((cat, index) => {
+                                const name = typeof cat === 'string' ? cat : cat.name;
+                                const slug = typeof cat === 'string' ? undefined : cat.slug;
 
-                            return slug ? (
-                                <Link key={index} to={`/${lang}/writings?category=${slug}`} className="card-tag">
-                                    {name}
-                                </Link>
-                            ) : (
-                                <span key={index} className="card-tag">{name}</span>
-                            );
-                        })}
-                    </div>
-                )}
+                                return slug ? (
+                                    <Link key={index} to={`/${lang}/writings?category=${slug}`} className="card-tag">
+                                        {name}
+                                    </Link>
+                                ) : (
+                                    <span key={index} className="card-tag">{name}</span>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
             </div>
             <Link to={`/${lang}/writings/${id}`}>
                 <h4 className="card-title">{title}</h4>
