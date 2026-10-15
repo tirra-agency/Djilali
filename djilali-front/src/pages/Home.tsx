@@ -92,6 +92,7 @@ const Home: React.FC = () => {
     const heroPost = displayedPosts.length > 0 ? displayedPosts[0] : null;
     const heroReadingTime = heroPost ? getReadingTime(heroPost, lang) : null;
     const otherPosts = displayedPosts.slice(1, 4);
+    const firstRowVideos = displayedVideos.slice(0, 3);
 
     return (
         <main>
@@ -217,8 +218,8 @@ const Home: React.FC = () => {
                         <hr />
                     </div>
                     <div className="cards-grid">
-                        {displayedVideos.length > 0 ? (
-                            displayedVideos.map((video: any) => {
+                        {firstRowVideos.length > 0 ? (
+                            firstRowVideos.map((video: any) => {
                                 const getYouTubeThumbnail = (url: string) => {
                                     if (!url) return '/assets/images/video_studio.png';
                                     let videoId = '';
