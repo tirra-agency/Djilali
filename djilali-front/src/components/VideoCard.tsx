@@ -10,9 +10,10 @@ interface VideoCardProps {
     date: string;
     title: string;
     excerpt: string;
+    seriesBadge?: string;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ id, image, date, title, excerpt }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ id, image, date, title, excerpt, seriesBadge }) => {
     const { lang } = useLanguage();
 
     return (
@@ -29,7 +30,25 @@ const VideoCard: React.FC<VideoCardProps> = ({ id, image, date, title, excerpt }
                     <div className="play-btn"></div>
                 </div>
             </Link>
-            <span className="date">{date}</span>
+            <div className="card-meta" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap', margin: '10px 0 6px' }}>
+                <span className="date">{date}</span>
+                {seriesBadge && (
+                    <span 
+                        className="card-tag card-tag-series"
+                        style={{
+                            background: 'var(--primary-color, #1a202c)',
+                            color: '#ffffff',
+                            fontWeight: 600,
+                            padding: '3px 8px',
+                            borderRadius: '4px',
+                            fontSize: '0.75rem',
+                            letterSpacing: '0.5px'
+                        }}
+                    >
+                        {seriesBadge}
+                    </span>
+                )}
+            </div>
             <Link to={`/${lang}/videos/${id}`}>
                 <h4 className="card-title">{title}</h4>
             </Link>

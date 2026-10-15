@@ -11,7 +11,7 @@ const Videos: React.FC = () => {
     const { lang } = useLanguage();
 
     useEffect(() => {
-        client.fetch(`*[_type == "video"] | order(publishedAt desc)`)
+        client.fetch(`*[_type == "video"] | order(publishedAt desc){..., series->{_id, title, title_ar, slug}}`)
             .then((data) => {
                 setVideos(data);
                 setLoading(false);
@@ -61,16 +61,24 @@ const Videos: React.FC = () => {
                     ) : (
                         <div className="cards-grid" style={{ marginTop: '40px' }}>
                             {displayedVideos.length > 0 ? (
-                                displayedVideos.map((video: any) => (
-                                    <VideoCard 
-                                        key={video._id}
-                                        id={video._id}
-                                        image={getYouTubeThumbnail(video.videoUrl)}
-                                        date={video.publishedAt ? formatDate(video.publishedAt) : ''}
-                                        title={getLocalizedText(video, 'title', lang)}
-                                        excerpt={getLocalizedText(video, 'description', lang).substring(0, 100)}
-                                    />
-                                ))
+                                displayedVideos.map((video: any) => {
+                                    const epNum = video.episode ?? video.seriesOrder;
+                                    const seriesBadge = epNum !== undefined && epNum !== null
+                                        ? `${t('episode_number', lang)} ${epNum}`
+                                        : undefined;
+
+                                    return (
+                                        <VideoCard 
+                                            key={video._id}
+                                            id={video._id}
+                                            image={getYouTubeThumbnail(video.videoUrl)}
+                                            date={video.publishedAt ? formatDate(video.publishedAt) : ''}
+                                            title={getLocalizedText(video, 'title', lang)}
+                                            excerpt={getLocalizedText(video, 'description', lang).substring(0, 100)}
+                                            seriesBadge={seriesBadge}
+                                        />
+                                    );
+                                })
                             ) : (
                                 <p style={{ textAlign: 'center', width: '100%', gridColumn: '1 / -1', padding: '2rem 0', color: '#666' }}>
                                     {lang === 'ar' ? t('no_arabic_videos', lang) : "D'autres vidéos seront ajoutées prochainement."}

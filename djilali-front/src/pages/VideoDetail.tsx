@@ -1,25 +1,119 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { client } from '../sanity/client';
 import { useLanguage } from '../contexts/LanguageProvider';
 import { t } from '../utils/i18n';
-import { hasArabic, getLocalizedText } from '../utils/localization';
+import { hasArabic, getLocalizedText, filterByLang } from '../utils/localization';
+import VideoCard from '../components/VideoCard';
 
 const VideoDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [video, setVideo] = useState<any>(null);
+    const [relatedVideos, setRelatedVideos] = useState<any[]>([]);
+    const [isSeriesMode, setIsSeriesMode] = useState<boolean>(false);
+    const [seriesData, setSeriesData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const { lang, setLang } = useLanguage();
+    const carouselRef = useRef<HTMLDivElement>(null);
+
+    const scrollPrev = () => {
+        if (carouselRef.current) {
+            const card = carouselRef.current.querySelector('.card') as HTMLElement;
+            const scrollDistance = card ? card.offsetWidth + 20 : 300;
+            carouselRef.current.scrollBy({ left: -scrollDistance, behavior: 'smooth' });
+        }
+    };
+
+    const scrollNext = () => {
+        if (carouselRef.current) {
+            const card = carouselRef.current.querySelector('.card') as HTMLElement;
+            const scrollDistance = card ? card.offsetWidth + 20 : 300;
+            carouselRef.current.scrollBy({ left: scrollDistance, behavior: 'smooth' });
+        }
+    };
+
+    const fetchRecentVideos = (currentId: string) => {
+        client.fetch(`*[_type == "video" && _id != $currentId] | order(publishedAt desc)[0...6]{
+            _id,
+            title,
+            title_ar,
+            videoUrl,
+            publishedAt,
+            description,
+            description_ar,
+            episode,
+            seriesOrder,
+            series->{_id, title, title_ar, slug}
+        }`, { currentId })
+            .then((recentItems) => {
+                setRelatedVideos(recentItems || []);
+                setIsSeriesMode(false);
+            })
+            .catch(console.error);
+    };
 
     useEffect(() => {
         if (id) {
-            client.fetch(`*[_type == "video" && _id == $id][0]`, { id })
+            setLoading(true);
+            setIsSeriesMode(false);
+            setSeriesData(null);
+
+            client.fetch(`*[_type == "video" && _id == $id][0]{
+                _id,
+                title,
+                title_ar,
+                videoUrl,
+                publishedAt,
+                description,
+                description_ar,
+                episode,
+                seriesOrder,
+                series->{_id, title, title_ar, slug, description, description_ar}
+            }`, { id })
                 .then((data) => {
                     setVideo(data);
                     setLoading(false);
+
+                    if (!data) return;
+                    const currentId = data._id;
+
+                    // If video belongs to a series -> fetch other episodes of that series
+                    if (data.series?._id) {
+                        const seriesId = data.series._id;
+                        client.fetch(`*[_type == "video" && series._ref == $seriesId && _id != $currentId] | order(episode asc, seriesOrder asc, publishedAt asc){
+                            _id,
+                            title,
+                            title_ar,
+                            videoUrl,
+                            publishedAt,
+                            description,
+                            description_ar,
+                            episode,
+                            seriesOrder,
+                            series->{_id, title, title_ar, slug}
+                        }`, { seriesId, currentId })
+                            .then((seriesItems) => {
+                                if (seriesItems && seriesItems.length > 0) {
+                                    setRelatedVideos(seriesItems);
+                                    setIsSeriesMode(true);
+                                    setSeriesData(data.series);
+                                } else {
+                                    fetchRecentVideos(currentId);
+                                }
+                            })
+                            .catch((err) => {
+                                console.error('Error fetching series videos:', err);
+                                fetchRecentVideos(currentId);
+                            });
+                    } else {
+                        fetchRecentVideos(currentId);
+                    }
                 })
-                .catch(console.error);
+                .catch((err) => {
+                    console.error(err);
+                    setLoading(false);
+                });
         } else {
             setLoading(false);
         }
@@ -30,6 +124,18 @@ const VideoDetail: React.FC = () => {
             day: 'numeric', month: 'long', year: 'numeric'
         }).toUpperCase()
         : '';
+
+    const formatCardDate = (dateString: string) => {
+        if (!dateString) return '';
+        if (lang === 'ar') {
+            return new Date(dateString).toLocaleDateString('ar-DZ', {
+                day: 'numeric', month: 'long', year: 'numeric'
+            });
+        }
+        return new Date(dateString).toLocaleDateString('fr-FR', {
+            day: 'numeric', month: 'long', year: 'numeric'
+        }).toUpperCase();
+    };
 
     // Helper to convert standard youtube links to embed links
     const getEmbedUrl = (url: string) => {
@@ -43,10 +149,31 @@ const VideoDetail: React.FC = () => {
         return url;
     };
 
+    const getYouTubeThumbnail = (url: string) => {
+        if (!url) return '/assets/images/video_studio.png';
+        let videoId = '';
+        if (url.includes('youtube.com/watch?v=')) {
+            videoId = url.split('v=')[1]?.split('&')[0];
+        } else if (url.includes('youtu.be/')) {
+            videoId = url.split('youtu.be/')[1]?.split('?')[0];
+        }
+        if (videoId) {
+            return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        }
+        return '/assets/images/video_studio.png';
+    };
+
     const embedUrl = getEmbedUrl(video?.videoUrl);
     const isArabicMissing = lang === 'ar' && video && !hasArabic(video, 'title');
     const videoTitle = video ? getLocalizedText(video, 'title', lang) : '';
     const videoDesc = video ? getLocalizedText(video, 'description', lang) : '';
+
+    const currentEpisodeNum = video?.episode ?? video?.seriesOrder;
+    const currentEpisodeBadge = currentEpisodeNum !== undefined && currentEpisodeNum !== null
+        ? `${t('episode_number', lang)} ${currentEpisodeNum}`
+        : null;
+
+    const filteredRelatedVideos = filterByLang(relatedVideos, lang);
 
     return (
         <main>
@@ -118,7 +245,43 @@ const VideoDetail: React.FC = () => {
                                 )}
                             </motion.div>
 
-                            {formattedDate && <span className="date">{formattedDate}</span>}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', margin: '5px 0 15px' }}>
+                                {formattedDate && <span className="date" style={{ margin: 0 }}>{formattedDate}</span>}
+                                {video?.series && (
+                                    <span 
+                                        className="card-tag card-tag-series"
+                                        style={{
+                                            background: 'var(--primary-color, #1a202c)',
+                                            color: '#ffffff',
+                                            fontWeight: 600,
+                                            padding: '4px 10px',
+                                            borderRadius: '4px',
+                                            fontSize: '0.78rem',
+                                            letterSpacing: '0.5px'
+                                        }}
+                                    >
+                                        {getLocalizedText(video.series, 'title', lang) || video.series.title}
+                                        {currentEpisodeBadge ? ` • ${currentEpisodeBadge}` : ''}
+                                    </span>
+                                )}
+                                {!video?.series && currentEpisodeBadge && (
+                                    <span 
+                                        className="card-tag card-tag-series"
+                                        style={{
+                                            background: 'var(--primary-color, #1a202c)',
+                                            color: '#ffffff',
+                                            fontWeight: 600,
+                                            padding: '4px 10px',
+                                            borderRadius: '4px',
+                                            fontSize: '0.78rem',
+                                            letterSpacing: '0.5px'
+                                        }}
+                                    >
+                                        {currentEpisodeBadge}
+                                    </span>
+                                )}
+                            </div>
+
                             <motion.h1 
                                 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', margin: '10px 0 20px' }}
                                 initial={{ opacity: 0, y: 20 }}
@@ -138,6 +301,105 @@ const VideoDetail: React.FC = () => {
                         </>
                     )}
                 </div>
+
+                {/* --- RECOMMENDED / SERIES VIDEOS SECTION --- */}
+                {filteredRelatedVideos.length > 0 && !isArabicMissing && (
+                    <motion.div 
+                        className="container" 
+                        style={{ 
+                            maxWidth: '1240px', 
+                            margin: '80px auto 30px auto', 
+                            paddingTop: '50px',
+                            borderTop: '1px solid rgba(0, 0, 0, 0.08)' 
+                        }}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <div style={{ marginBottom: '35px' }}>
+                            <h3 style={{ 
+                                fontFamily: 'var(--font-serif)', 
+                                fontSize: '2rem', 
+                                color: 'var(--primary-color)', 
+                                margin: '0 0 10px 0',
+                                lineHeight: 1.3
+                            }}>
+                                {isSeriesMode 
+                                    ? `${t('in_same_series', lang)} : ${getLocalizedText(seriesData, 'title', lang) || seriesData?.title || ''}`
+                                    : t('recommended_videos', lang)
+                                }
+                            </h3>
+
+                            {isSeriesMode && getLocalizedText(seriesData, 'description', lang) && (
+                                <p style={{ color: '#666', fontSize: '1.05rem', margin: 0, maxWidth: '700px' }}>
+                                    {getLocalizedText(seriesData, 'description', lang)}
+                                </p>
+                            )}
+                            {!isSeriesMode && (
+                                <p style={{ color: '#666', fontSize: '1.05rem', margin: 0 }}>
+                                    {t('explore_more_videos', lang)}
+                                </p>
+                            )}
+                        </div>
+
+                        {filteredRelatedVideos.length > 4 ? (
+                            <div className="related-carousel-wrapper">
+                                <button className="carousel-btn prev-btn" aria-label="Previous" onClick={scrollPrev}>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                    </svg>
+                                </button>
+                                <div className="related-grid-carousel" ref={carouselRef}>
+                                    {filteredRelatedVideos.map((item: any, index: number) => {
+                                        const epNum = item.episode ?? item.seriesOrder;
+                                        const seriesBadge = isSeriesMode
+                                            ? `${t('episode_number', lang)} ${epNum !== undefined && epNum !== null ? epNum : index + 1}`
+                                            : (epNum !== undefined && epNum !== null ? `${t('episode_number', lang)} ${epNum}` : undefined);
+
+                                        return (
+                                            <VideoCard 
+                                                key={item._id}
+                                                id={item._id}
+                                                image={getYouTubeThumbnail(item.videoUrl)}
+                                                date={item.publishedAt ? formatCardDate(item.publishedAt) : ''}
+                                                title={getLocalizedText(item, 'title', lang)}
+                                                excerpt={getLocalizedText(item, 'description', lang)?.substring(0, 100) || ''}
+                                                seriesBadge={seriesBadge}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                                <button className="carousel-btn next-btn" aria-label="Next" onClick={scrollNext}>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="related-grid-static">
+                                {filteredRelatedVideos.map((item: any, index: number) => {
+                                    const epNum = item.episode ?? item.seriesOrder;
+                                    const seriesBadge = isSeriesMode
+                                        ? `${t('episode_number', lang)} ${epNum !== undefined && epNum !== null ? epNum : index + 1}`
+                                        : (epNum !== undefined && epNum !== null ? `${t('episode_number', lang)} ${epNum}` : undefined);
+
+                                    return (
+                                        <VideoCard 
+                                            key={item._id}
+                                            id={item._id}
+                                            image={getYouTubeThumbnail(item.videoUrl)}
+                                            date={item.publishedAt ? formatCardDate(item.publishedAt) : ''}
+                                            title={getLocalizedText(item, 'title', lang)}
+                                            excerpt={getLocalizedText(item, 'description', lang)?.substring(0, 100) || ''}
+                                            seriesBadge={seriesBadge}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </motion.div>
+                )}
             </section>
         </main>
     );

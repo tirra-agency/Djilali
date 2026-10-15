@@ -53,7 +53,7 @@ const Home: React.FC = () => {
         // Fetch all needed content concurrently
         Promise.all([
             client.fetch(`*[_type == "post"] | order(publishedAt desc){..., categories[]->{title, title_ar, slug}}`),
-            client.fetch(`*[_type == "video"] | order(publishedAt desc)`),
+            client.fetch(`*[_type == "video"] | order(publishedAt desc){..., series->{_id, title, title_ar, slug}}`),
             client.fetch(`*[_type == "book"] | order(publicationDate desc)`)
         ]).then(([postsData, videosData, booksData]) => {
             setPosts(postsData);
@@ -234,6 +234,11 @@ const Home: React.FC = () => {
                                     return '/assets/images/video_studio.png';
                                 };
 
+                                const epNum = video.episode ?? video.seriesOrder;
+                                const seriesBadge = epNum !== undefined && epNum !== null
+                                    ? `${t('episode_number', lang)} ${epNum}`
+                                    : undefined;
+
                                 return (
                                     <VideoCard 
                                         key={video._id}
@@ -242,6 +247,7 @@ const Home: React.FC = () => {
                                         date={video.publishedAt ? formatDate(video.publishedAt) : ''}
                                         title={getLocalizedText(video, 'title', lang)}
                                         excerpt={getLocalizedText(video, 'description', lang).substring(0, 100)}
+                                        seriesBadge={seriesBadge}
                                     />
                                 );
                             })

@@ -46,6 +46,9 @@ const translations: Record<string, {fr: string; ar: string}> = {
   related_articles: {fr: 'Articles similaires', ar: 'مقالات ذات صلة'},
   similar_topics: {fr: 'Sur le même thème', ar: 'في نفس الموضوع'},
   explore_more_articles: {fr: "D'autres lectures", ar: 'قراءات أخرى'},
+  episode_number: {fr: 'Épisode', ar: 'الحلقة'},
+  recommended_videos: {fr: 'Vidéos recommandées', ar: 'فيديوهات مقترحة'},
+  explore_more_videos: {fr: "D'autres vidéos à regarder", ar: 'فيديوهات أخرى للمشاهدة'},
 }
 
 export const t = (key: string, lang: 'fr' | 'ar') => {

@@ -36,6 +36,20 @@ export const videoType = defineType({
       title: 'Description (Français)',
       type: 'text',
     }),
+    defineField({
+      name: 'series',
+      title: 'Série / سلسلة (Optionnel)',
+      description: 'Associer cette vidéo à une série pour suggérer les autres épisodes aux spectateurs.',
+      type: 'reference',
+      to: [{type: 'series'}],
+    }),
+    defineField({
+      name: 'episode',
+      title: 'Numéro d’épisode / رقم الحلقة (Optionnel)',
+      description: 'Ex: 1 pour Épisode 1, 2 pour Épisode 2, etc.',
+      type: 'number',
+      validation: (rule) => rule.integer().min(1),
+    }),
 
     // --- Arabic (Optional) Content ---
     defineField({
@@ -57,10 +71,14 @@ export const videoType = defineType({
     select: {
       title: 'title',
       title_ar: 'title_ar',
+      episode: 'episode',
+      seriesTitle: 'series.title',
     },
-    prepare({title, title_ar}) {
+    prepare({title, title_ar, episode, seriesTitle}) {
+      const epPrefix = episode ? `[Ép. ${episode}] ` : ''
+      const seriesSuffix = seriesTitle ? ` (${seriesTitle})` : ''
       return {
-        title: title || 'Sans titre',
+        title: `${epPrefix}${title || 'Sans titre'}${seriesSuffix}`,
         subtitle: title_ar ? `AR: ${title_ar}` : 'Pas de traduction arabe',
       }
     },
