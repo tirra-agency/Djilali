@@ -4,6 +4,7 @@ import Hero from '../components/Hero';
 import ArticleCard from '../components/ArticleCard';
 import VideoCard from '../components/VideoCard';
 import BookCard from '../components/BookCard';
+import Newsletter from '../components/Newsletter';
 import { client, urlFor } from '../sanity/client';
 import { useLanguage } from '../contexts/LanguageProvider';
 import { t } from '../utils/i18n';
@@ -305,16 +306,7 @@ const Home: React.FC = () => {
             </section>
 
             {/* Newsletter Section */}
-            <section className="section newsletter">
-                <div className="container text-center">
-                    <h2 className="newsletter-title">{t('newsletter_title', lang)}</h2>
-                    <p className="newsletter-subtitle">{t('newsletter_subtitle', lang)}</p>
-                    <form className="newsletter-form" onSubmit={e => e.preventDefault()}>
-                        <input type="email" placeholder={t('email_placeholder', lang)} required />
-                        <button type="submit" className="btn-submit">{t('subscribe', lang)}</button>
-                    </form>
-                </div>
-            </section>
+            <Newsletter />
         </main>
     );
 };
