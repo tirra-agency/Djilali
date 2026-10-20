@@ -6,6 +6,7 @@ import {categoryType} from './categoryType'
 import {seriesType} from './seriesType'
 import {siteSettingsType} from './siteSettingsType'
 import {subscriberType} from './subscriberType'
+import {contactMessageType} from './contactMessageType'
 
 export const schemaTypes = [
   postType,
@@ -16,5 +17,6 @@ export const schemaTypes = [
   seriesType,
   siteSettingsType,
   subscriberType,
+  contactMessageType,
 ]
 

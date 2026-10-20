@@ -29,6 +29,7 @@ const Contact: React.FC = () => {
         formData.append("access_key", accessKey);
 
         try {
+            // 1. Send email to client's inbox via Web3Forms
             const response = await fetch("https://api.web3forms.com/submit", {
                 method: "POST",
                 body: formData
@@ -36,11 +37,25 @@ const Contact: React.FC = () => {
 
             const data = await response.json();
 
+            // 2. Also save message into Sanity Studio database
+            fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: formData.get("name"),
+                    email: formData.get("email"),
+                    subject: formData.get("subject"),
+                    message: formData.get("message"),
+                }),
+            }).catch((sanityErr) => {
+                console.error("Sanity save error:", sanityErr);
+            });
+
             if (data.success) {
                 setStatus('success');
                 form.reset();
             } else {
-                console.error("Error", data);
+                console.error("Web3Forms Error", data);
                 setStatus('error');
             }
         } catch (error) {
