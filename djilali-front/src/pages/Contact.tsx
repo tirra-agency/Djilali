@@ -90,14 +90,44 @@ const Contact: React.FC = () => {
                         className="contact-card"
                     >
                         {status === 'success' ? (
-                            <div className="contact-success">
-                                <span style={{ fontSize: '3rem', display: 'block', marginBottom: '10px' }}>✅</span>
-                                <h2>{lang === 'ar' ? 'شكراً على رسالتك!' : 'Merci pour votre message !'}</h2>
-                                <p>{lang === 'ar' ? 'تم إرسال رسالتك بنجاح وسأرد عليك في أقرب وقت ممكن.' : 'Il a bien été envoyé et je vous répondrai dans les plus brefs délais.'}</p>
-                                <button onClick={() => setStatus('')} className="btn-primary" style={{ marginTop: '20px' }}>
-                                    {lang === 'ar' ? 'إرسال رسالة أخرى' : 'Envoyer un autre message'}
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, ease: "easeOut" }}
+                                className="contact-success"
+                            >
+                                <motion.div 
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}
+                                    className="contact-success-icon-wrapper"
+                                >
+                                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </motion.div>
+                                <h2 className="contact-success-title">
+                                    {lang === 'ar' ? 'شكراً على رسالتك!' : 'Merci pour votre message !'}
+                                </h2>
+                                <p className="contact-success-text">
+                                    {lang === 'ar' 
+                                        ? 'تم إرسال رسالتك بنجاح وسأرد عليك في أقرب وقت ممكن.' 
+                                        : 'Votre message a bien été transmis. Je vous répondrai dans les plus brefs délais.'}
+                                </p>
+                                <button 
+                                    onClick={() => setStatus('')} 
+                                    className="contact-success-btn"
+                                    type="button"
+                                >
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                        <path d="M3 3v5h5"></path>
+                                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+                                        <path d="M16 16h5v5"></path>
+                                    </svg>
+                                    <span>{lang === 'ar' ? 'إرسال رسالة أخرى' : 'Envoyer un autre message'}</span>
                                 </button>
-                            </div>
+                            </motion.div>
                         ) : (
                             <form onSubmit={handleSubmit} className="contact-form">
                                 {status === 'no_key' && (
