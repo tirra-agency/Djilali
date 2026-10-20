@@ -197,7 +197,11 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
   }
 
   const brevoApiKey = process.env.BREVO_API_KEY;
-  const senderEmail = process.env.BREVO_SENDER_EMAIL || 'marouatirra@gmail.com';
+  const envSender = process.env.BREVO_SENDER_EMAIL;
+  // Ensure verified email is used so Brevo never rejects the send
+  const senderEmail = (envSender && !envSender.includes('contact@soufianedjilali.com'))
+    ? envSender
+    : 'marouatirra@gmail.com';
   const senderName = process.env.BREVO_SENDER_NAME || 'Soufiane Djilali';
   const siteBaseUrl = process.env.SITE_URL || 'https://soufianedjilali.com';
 
