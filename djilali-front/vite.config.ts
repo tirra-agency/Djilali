@@ -21,6 +21,9 @@ export default defineConfig(({ mode }) => {
               });
               req.on('end', async () => {
                 try {
+                  const currentEnv = loadEnv(mode, process.cwd(), '');
+                  Object.assign(process.env, currentEnv);
+
                   const parsedBody = body ? JSON.parse(body) : {};
                   const mockRes = {
                     status(code: number) {
